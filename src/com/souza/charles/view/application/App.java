@@ -22,7 +22,7 @@ public class App {
         ResultSet resultSet = statement.executeQuery("select * from tb_product");
 
         while (resultSet.next()) {
-            System.out.println(resultSet.getLong("Id") + ", " + resultSet.getString("Name"));
+            System.out.println(resultSet.getLong("Id") + ", " + resultSet.getString("Name") + ", " + resultSet.getString("Description"));
         }
 
     }
