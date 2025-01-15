@@ -87,7 +87,7 @@ INSERT INTO tb_order_product (order_id, product_id) VALUES
 ### 3. Entities Classes:
 - Create the `Order` and `Product` classes;
 
-![Order and Product Entities](https://github.com/souzafcharles/JDBC-Connection-to-PostgreSQL/img/order-product-entities.png)
+![Order and Product Entities](https://github.com/souzafcharles/JDBC-Connection-to-PostgreSQL/blob/main/img/order-product-entities.png)
 
 #### Entities classes checklist:
 - Attributes;
