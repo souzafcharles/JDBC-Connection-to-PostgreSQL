@@ -119,5 +119,19 @@ INNER JOIN tb_product ON tb_product.id = tb_order_product.product_id
 
 ▶️ [Tutorial Video DevSuperior](https://www.youtube.com/watch?v=xC_yKw3MYX4&ab_channel=DevSuperior)
 
+### 4. DAO Pattern (Data Access Object):
+- Create the `ProductDAO` and `OrderDAO` interfaces following the `DAO Pattern`.
+#### Generic DAO Class:
+```java
+public interface DAO<T> {
+    void insert(T obj);
+    void update(T obj);
+    void deleteById(Integer id);
+    T findById(Integer id);
+    List<T> findAll();
+}
+```
+- Implement the classes `OrderDAOJDBC` and `OrderDAOJDBC`.
+- Create the `DAOFactory` to instantiate DAO objects.
 
-
+![DaoFactory](https://github.com/souzafcharles/JDBC-Connection-to-PostgreSQL/blob/main/img/daoFactory.png)
