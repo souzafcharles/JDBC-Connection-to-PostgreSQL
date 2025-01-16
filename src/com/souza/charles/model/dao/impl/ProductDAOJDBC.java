@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAOJDBC implements ProductDAO {
@@ -44,14 +45,13 @@ public class ProductDAOJDBC implements ProductDAO {
     public Product findById(Integer id) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-
         try {
             preparedStatement = connection.prepareStatement(
                     "SELECT * FROM tb_product "
                             + "WHERE Id = ?");
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 return instantiateProduct(resultSet);
             }
             return null;
@@ -65,7 +65,25 @@ public class ProductDAOJDBC implements ProductDAO {
 
     @Override
     public List<Product> findAll() {
-        return List.of();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "SELECT * FROM tb_product "
+                            + "ORDER BY name");
+            resultSet = preparedStatement.executeQuery();
+            List<Product> productList = new ArrayList<>();
+            while (resultSet.next()) {
+                Product product = instantiateProduct(resultSet);
+                productList.add(product);
+            }
+            return productList;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+            DB.closeResultSet(resultSet);
+        }
     }
 
     private Product instantiateProduct(ResultSet resultSet) throws SQLException {

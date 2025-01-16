@@ -17,7 +17,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDAOJDBC implements OrderDAO {
 
@@ -72,7 +75,37 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public List<Order> findAll() {
-        return List.of();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "SELECT tb_order.*, "
+                            + "tb_product.* "
+                            + "FROM tb_order "
+                            + "INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id "
+                            + "INNER JOIN tb_product ON tb_order_product.product_id = tb_product.id "
+                            + "ORDER BY tb_order.id"
+            );
+            resultSet = preparedStatement.executeQuery();
+            Map<Long, Order> map = new HashMap<>();
+            List<Order> list = new ArrayList<>();
+            while (resultSet.next()) {
+                Order order = map.get(resultSet.getLong("id"));
+                if (order == null) {
+                    order = instantiateOrder(resultSet);
+                    list.add(order);
+                    map.put(order.getId(), order);
+                }
+                Product product = instantiateProduct(resultSet);
+                order.getProducts().add(product);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeResultSet(resultSet);
+            DB.closePreparedStatement(preparedStatement);
+        }
     }
 
     private Order instantiateOrder(ResultSet resultSet) throws SQLException {

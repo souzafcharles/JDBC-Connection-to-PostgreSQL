@@ -13,6 +13,7 @@ import com.souza.charles.model.entities.Order;
 import com.souza.charles.model.entities.Product;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class App {
 
@@ -29,5 +30,16 @@ public class App {
         Product product = productDAO.findById(2);
         System.out.println(product);
 
+        System.out.println("\n********** TEST 03: Order findAll **********");
+        List<Order>listOrder = orderDAO.findAll();
+        for (Order o : listOrder) {
+            System.out.println(o);
+        }
+
+        System.out.println("\n********** TEST 03: Product findAll **********");
+        List<Product> listProduct = productDAO.findAll();
+        for (Product p : listProduct) {
+            System.out.println(p);
+        }
     }
 }
