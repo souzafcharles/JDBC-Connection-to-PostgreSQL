@@ -79,27 +79,15 @@ public class OrderDAOJDBC implements OrderDAO {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement(
-                    "SELECT tb_order.*, "
-                            + "tb_product.* "
-                            + "FROM tb_order "
-                            + "INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id "
-                            + "INNER JOIN tb_product ON tb_order_product.product_id = tb_product.id "
-                            + "ORDER BY tb_order.id"
-            );
+                    "SELECT * FROM tb_order "
+                            + "ORDER BY id");
             resultSet = preparedStatement.executeQuery();
-            Map<Long, Order> map = new HashMap<>();
-            List<Order> list = new ArrayList<>();
+            List<Order> orderList = new ArrayList<>();
             while (resultSet.next()) {
-                Order order = map.get(resultSet.getLong("id"));
-                if (order == null) {
-                    order = instantiateOrder(resultSet);
-                    list.add(order);
-                    map.put(order.getId(), order);
-                }
-                Product product = instantiateProduct(resultSet);
-                order.getProducts().add(product);
+                Order order = instantiateOrder(resultSet);
+                orderList.add(order);
             }
-            return list;
+            return orderList;
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         } finally {

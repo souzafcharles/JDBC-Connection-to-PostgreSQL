@@ -182,16 +182,8 @@ for (Product p : listProduct) {
 ```
 #### Order SQL Query:
 ```SQL
-SELECT tb_order.*, 
-       tb_product.id AS ProductId, 
-       tb_product.name AS ProductName, 
-       tb_product.price AS ProductPrice, 
-       tb_product.description AS ProductDescription, 
-       tb_product.image_uri AS ProductImageUri 
-FROM tb_order 
-INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id 
-INNER JOIN tb_product ON tb_order_product.product_id = tb_product.id 
-ORDER BY tb_order.id;
+SELECT * FROM tb_order 
+ORDER BY id;
 ```
 #### Product SQL Query:
 ```SQL
