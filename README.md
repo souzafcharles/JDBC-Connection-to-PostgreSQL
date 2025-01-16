@@ -110,8 +110,14 @@ INSERT INTO tb_order_product (order_id, product_id) VALUES
 - Object Composition;
 - Collections (List and Map);
 - Accessing data in a Relational Database and instantiating corresponding objects;
+#### Query to retrieve Orders with their Products:
+```SQL
+SELECT * FROM tb_order
+INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id
+INNER JOIN tb_product ON tb_product.id = tb_order_product.product_id
+```
 
-▶️ [Tutorial Video DevSuperior](https://www.youtube.com/watch/v=xC_yKw3MYX4&ab_channel=DevSuperior)
+▶️ [Tutorial Video DevSuperior](https://www.youtube.com/watch?v=xC_yKw3MYX4&ab_channel=DevSuperior)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xC_yKw3MYX4" title="Tutorial Video DevSuperior" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 
