@@ -12,11 +12,11 @@ import com.souza.charles.model.db.DB;
 
 public class DAOFactory {
 
-    public static OrderDAO createOrderDao() {
+    public static OrderDAO createOrderDAO() {
         return new OrderDAOJDBC(DB.getConnection());
     }
 
-    public static ProductDAO createProductDao() {
+    public static ProductDAO createProductDAO() {
         return new ProductDAOJDBC(DB.getConnection());
     }
 }

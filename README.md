@@ -135,3 +135,33 @@ public interface DAO<T> {
 - Create the `DAOFactory` to instantiate DAO objects.
 
 ![DaoFactory](https://github.com/souzafcharles/JDBC-Connection-to-PostgreSQL/blob/main/img/daoFactory.png)
+
+### 5. CRUD Operations Implementation:
+#### 5.1 **findById -** Implement the search by `ID`:
+
+#### App Class:
+```java
+OrderDAO orderDAO = DAOFactory.createOrderDAO();
+Order order = orderDAO.findById(1);
+System.out.println(order);
+
+ProductDAO productDAO = DAOFactory.createProductDAO();     
+Product product = productDAO.findById(2);
+System.out.println(product);
+```
+#### Order SQL Query:
+```SQL
+SELECT tb_order.*, " 
++ "tb_product.id AS ProductId, tb_product.name AS ProductName, tb_product.price AS ProductPrice, " 
++ "tb_product.description AS ProductDescription, tb_product.image_uri AS ProductImageUri " 
++ "FROM tb_order " 
++ "INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id " 
++ "INNER JOIN tb_product ON tb_order_product.product_id = tb_product.id " 
++ "WHERE tb_order.id = ?
+```
+
+#### Product SQL Query:
+```SQL
+SELECT * FROM tb_product "
++ "WHERE Id = ?
+```
