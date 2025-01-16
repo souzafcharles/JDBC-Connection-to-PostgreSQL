@@ -96,3 +96,22 @@ INSERT INTO tb_order_product (order_id, product_id) VALUES
 - hashCode and equals;
 - toString;
 - Implements Serializable.
+
+### 4. Tutorial Video Tests Checklist:
+- Primary key and Foreign key;
+- DDL (create table, alter table);
+- SQL:
+  - INSERT;
+  - SELECT;
+  - INNER JOIN;
+- Classes and Objects;
+- Encapsulation, get/set;
+- Enumerated types;
+- Object Composition;
+- Collections (List and Map);
+- Accessing data in a Relational Database and instantiating corresponding objects;
+
+▶️ [Tutorial Video DevSuperior](https://www.youtube.com/watch/v=xC_yKw3MYX4&ab_channel=DevSuperior)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xC_yKw3MYX4" title="Tutorial Video DevSuperior" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
