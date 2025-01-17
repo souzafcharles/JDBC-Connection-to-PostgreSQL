@@ -1,6 +1,21 @@
+![GitHub language count](https://img.shields.io/github/languages/count/souzafcharles/JDBC-Connection-to-PostgreSQL)
+![GitHub top language](https://img.shields.io/github/languages/top/souzafcharles/JDBC-Connection-to-PostgreSQL)
+![GitHub license](https://img.shields.io/github/license/souzafcharles/JDBC-Connection-to-PostgreSQL)
+![GitHub last commit](https://img.shields.io/github/last-commit/souzafcharles/JDBC-Connection-to-PostgreSQL)
+
+# :coffee: Object-oriented and SQL revision using Java and JDBC
+
+:triangular_flag_on_post: Prof. Dr. Nelio Alves - [DevSuperior](https://devsuperior.com.br/)
+
+:black_nib: IDE used: `IntelliJ IDEA`
+
+:coffee: Java | version: `21`
+
+:elephant: Database | `PostgresSQL`
+
 #  Object-oriented and SQL revision using Java and JDBC
 
-**Instructions**: Develop a Java application that connects to a database using `JDBC` and interfaces following the `DAO pattern`, featuring entity classes for `Order` and `Product`. The target database is `chdeliver`.
+**Instructions**: Develop a Java application that connects to a database using `JDBC` and interfaces following the `DAO pattern`, featuring entity classes for `Order` and `Product`. The target `PostgresSQL` database is `chdeliver`.
 
 ## Steps to Follow:
 
@@ -199,7 +214,6 @@ ORDER BY name;
 ```
 ***
 #### 6.3 `insert` - Implement the `insertion` of new records:
-
 #### App Class:
 ```java
 System.out.println("\n********** TEST 03: Order insert **********");
@@ -238,7 +252,6 @@ product.setPrice(45.0);
 productDAO.update(product);
 System.out.println("Update completed!");
 ```
-
 #### Order SQL Query:
 ```SQL
 UPDATE tb_order 
@@ -250,4 +263,44 @@ WHERE id = ?
 UPDATE tb_product "
 SET name = ?, price = ?, image_uri = ?, description = ?
 WHERE id = ?
-```  
+``` 
+***
+#### 6.5 `delete` - Implement the `deletion` of records:
+#### App Class:
+```java
+System.out.println("\n********** TEST 05: Order delete **********");
+System.out.print("Enter the Order Id for deleteById test: ");
+int id = scanner.nextInt();
+orderDAO.deleteById(id);
+System.out.println("Delete completed!");
+
+System.out.println("\n********** TEST 05: Product delete **********");
+System.out.print("Enter the Product Id for deleteById test: ");
+id = scanner.nextInt();
+productDAO.deleteById(id);
+System.out.println("Delete completed!");
+``` 
+#### Order SQL Query (tb_order_product):
+Delete references in the relationship table.
+```SQL
+DELETE FROM tb_order_product 
+WHERE id = ?;
+```
+#### Product SQL Query:
+Delete references in the relationship table.
+```SQL
+DELETE FROM tb_order_product
+WHERE id = ?;
+```
+#### Order SQL Query:
+Delete the Order.
+```SQL
+DELETE FROM tb_order 
+WHERE id = ?;
+```
+#### Product SQL Query:
+Delete the Product.
+```SQL
+DELETE FROM tb_product 
+WHERE id = ?;
+```

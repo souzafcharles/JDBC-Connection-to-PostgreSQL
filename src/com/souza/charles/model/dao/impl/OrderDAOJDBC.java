@@ -86,8 +86,27 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement preparedStatement = null;
+        try {
+            // Delete references in the relationship table
+            preparedStatement = connection.prepareStatement(
+                    "DELETE FROM tb_order_product WHERE order_id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            DB.closePreparedStatement(preparedStatement);
 
+            // Delete the Order
+            preparedStatement = connection.prepareStatement(
+                    "DELETE FROM tb_order WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+        }
     }
+
 
     @Override
     public Order findById(Integer id) {

@@ -82,7 +82,27 @@ public class ProductDAOJDBC implements ProductDAO {
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement preparedStatement = null;
+        try {
+            // Delete references in the relationship table
+            preparedStatement = connection.prepareStatement(
+                    "DELETE FROM tb_order_product "
+                            + "WHERE product_id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            DB.closePreparedStatement(preparedStatement);
 
+            // Delete the Product
+            preparedStatement = connection.prepareStatement(
+                    "DELETE FROM tb_product "
+                            + "WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+        }
     }
 
     @Override

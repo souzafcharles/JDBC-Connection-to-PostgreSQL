@@ -16,10 +16,13 @@ import com.souza.charles.model.entities.enums.OrderStatus;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Scanner;
 
 public class App {
 
     public static void main(String[] args) throws SQLException {
+
+        Scanner scanner = new Scanner(System.in);
 
         OrderDAO orderDAO = DAOFactory.createOrderDAO();
         ProductDAO productDAO = DAOFactory.createProductDAO();
@@ -55,15 +58,28 @@ public class App {
         System.out.println("Inserted! New Product Name = " + newProduct.getName());
 
         System.out.println("\n********** TEST 04: Order update **********");
-        order = orderDAO.findById(5);
+        order = orderDAO.findById(2);
         order.setOrderStatus(OrderStatus.DELIVERED);
         orderDAO.update(order);
         System.out.println("Update completed!");
 
-        System.out.println("\n********** TEST 05: Product update **********");
-        product = productDAO.findById(4);
+        System.out.println("\n********** TEST 04: Product update **********");
+        product = productDAO.findById(2);
         product.setPrice(45.0);
         productDAO.update(product);
         System.out.println("Update completed!");
+
+        System.out.println("\n********** TEST 05: Order delete **********");
+        System.out.print("Enter the Order Id for deleteById test: ");
+        int id = scanner.nextInt();
+        orderDAO.deleteById(id);
+        System.out.println("Delete completed!");
+
+        System.out.println("\n********** TEST 05: Product delete **********");
+        System.out.print("Enter the Product Id for deleteById test: ");
+        id = scanner.nextInt();
+        productDAO.deleteById(id);
+        System.out.println("Delete completed!");
+        scanner.close();
     }
 }
