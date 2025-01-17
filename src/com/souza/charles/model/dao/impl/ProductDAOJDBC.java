@@ -11,10 +11,7 @@ import com.souza.charles.model.db.DB;
 import com.souza.charles.model.db.DbException;
 import com.souza.charles.model.entities.Product;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +25,35 @@ public class ProductDAOJDBC implements ProductDAO {
 
     @Override
     public void insert(Product product) {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO tb_product (name, price, image_uri, description) "
+                            + "VALUES (?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS);
 
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setDouble(2, product.getPrice());
+            preparedStatement.setString(3, product.getImageUri());
+            preparedStatement.setString(4, product.getDescription());
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    Long id = resultSet.getLong(1);
+                    product.setId(id);
+                }
+                DB.closeResultSet(resultSet);
+            } else {
+                throw new DbException("Unexpected error! No rows affected!");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+            DB.closeStatement(preparedStatement);
+        }
     }
 
     @Override

@@ -11,8 +11,10 @@ import com.souza.charles.model.dao.OrderDAO;
 import com.souza.charles.model.dao.ProductDAO;
 import com.souza.charles.model.entities.Order;
 import com.souza.charles.model.entities.Product;
+import com.souza.charles.model.entities.enums.OrderStatus;
 
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.List;
 
 public class App {
@@ -41,5 +43,16 @@ public class App {
         for (Product p : listProduct) {
             System.out.println(p);
         }
+
+        System.out.println("\n********** TEST 04: Order insert **********");
+        Order newOrder = new Order(null, -23.555555, -46.666666, Instant.now(), OrderStatus.PENDING);
+        orderDAO.insert(newOrder);
+        System.out.println("Inserted! New Order id = " + newOrder.getId());
+
+        System.out.println("\n********** TEST 04: Product insert **********");
+        Product newProduct = new Product(null, "Pizza Margherita Deluxe", 35.0, "Uma pizza clássica Margherita com tomates frescos, manjericão, muçarela de búfala e um toque de azeite extra virgem.", "https://github.com/souzafcharles/4.png");
+        productDAO.insert(newProduct);
+        System.out.println("Inserted! New Product Name = " + newProduct.getName());
+
     }
 }

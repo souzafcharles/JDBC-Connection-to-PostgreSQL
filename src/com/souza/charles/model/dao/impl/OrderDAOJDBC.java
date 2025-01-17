@@ -13,14 +13,9 @@ import com.souza.charles.model.entities.Order;
 import com.souza.charles.model.entities.Product;
 import com.souza.charles.model.entities.enums.OrderStatus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class OrderDAOJDBC implements OrderDAO {
 
@@ -32,7 +27,36 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void insert(Order order) {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO tb_order (latitude, longitude, moment, status) "
+                            + "VALUES (?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
 
+            preparedStatement.setDouble(1, order.getLatitude());
+            preparedStatement.setDouble(2, order.getLongitude());
+            preparedStatement.setTimestamp(3, Timestamp.from(order.getMoment()));
+            preparedStatement.setInt(4, order.getOrderStatus().ordinal());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    Long id = resultSet.getLong(1);
+                    order.setId(id);
+                }
+                DB.closeResultSet(resultSet);
+            } else {
+                throw new DbException("Unexpected error! No rows affected!");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+            DB.closeStatement(preparedStatement);
+        }
     }
 
     @Override

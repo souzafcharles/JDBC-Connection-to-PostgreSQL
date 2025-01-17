@@ -190,3 +190,26 @@ ORDER BY id;
 SELECT * FROM tb_product 
 ORDER BY name;
 ```
+
+#### 5.3 `insert` - Implement the `insertion` of new records:
+
+#### App Class:
+```java
+Order newOrder = new Order(null, -23.555555, -46.666666, Instant.now(), OrderStatus.PENDING);
+orderDAO.insert(newOrder);
+System.out.println("Inserted! New Order id = " + newOrder.getId());
+
+Product newProduct = new Product(null, "Pizza Margherita Deluxe", 35.0, "Uma pizza clássica Margherita com tomates frescos, manjericão, muçarela de búfala e um toque de azeite extra virgem.", "https://github.com/souzafcharles/4.png");
+productDAO.insert(newProduct);
+System.out.println("Inserted! New Department Name = " + newProduct.getName());
+```
+#### Order SQL Query:
+```SQL
+INSERT INTO tb_order (latitude, longitude, moment, status)
+VALUES (?, ?, ?, ?)
+```
+#### Product SQL Query:
+```SQL
+INSERT INTO tb_product (name, price, image_uri, description)
+VALUES (?,?,?,?)
+```    
