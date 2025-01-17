@@ -13,9 +13,9 @@
 
 :elephant: Database | `PostgresSQL`
 
-#  Object-oriented and SQL revision using Java and JDBC
-
-**Instructions**: Develop a Java application that connects to a database using `JDBC` and interfaces following the `DAO pattern`, featuring entity classes for `Order` and `Product`. The target `PostgresSQL` database is `chdeliver`.
+***
+## Instructions:
+Develop a Java application that connects to a database using `JDBC` and interfaces following the `DAO pattern`, featuring entity classes for `Order` and `Product`. The target `PostgresSQL` database is `chdeliver`.
 
 ## Steps to Follow:
 
@@ -155,7 +155,7 @@ public interface DAO<T> {
 ***
 ### 6. CRUD Operations Implementation:
 ***
-#### 6.1 `findById` - Implement the search by `ID`:
+### 6.1 `findById` - Implement the search by `ID`:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 01: Order findById **********");
@@ -187,7 +187,7 @@ SELECT * FROM tb_product
 WHERE id = 2;
 ```
 ***
-#### 6.2 `findAll` - Implement the search for `all` records:
+### 6.2 `findAll` - Implement the search for `all` records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 02: Order findAll **********");
@@ -213,7 +213,7 @@ SELECT * FROM tb_product
 ORDER BY name;
 ```
 ***
-#### 6.3 `insert` - Implement the `insertion` of new records:
+### 6.3 `insert` - Implement the `insertion` of new records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 03: Order insert **********");
@@ -237,7 +237,7 @@ INSERT INTO tb_product (name, price, image_uri, description)
 VALUES (?,?,?,?)
 ```  
 ***
-#### 6.4 `update` - Implement the `update` of existing records:
+### 6.4 `update` - Implement the `update` of existing records:
 ### App Class:
 ```java
 System.out.println("\n********** TEST 04: Order update **********");
@@ -265,7 +265,7 @@ SET name = ?, price = ?, image_uri = ?, description = ?
 WHERE id = ?
 ``` 
 ***
-#### 6.5 `delete` - Implement the `deletion` of records:
+### 6.5 `delete` - Implement the `deletion` of records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 05: Order delete **********");
