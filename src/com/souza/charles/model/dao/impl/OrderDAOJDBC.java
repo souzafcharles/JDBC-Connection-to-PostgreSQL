@@ -3,7 +3,7 @@ package com.souza.charles.model.dao.impl;
   Video Tutorial: Object-oriented and SQL revision using Java and JDBC
   Instructor: Prof. Dr. Nelio Alves - DevSuperior
   Example adapted by: Charles Fernandes de Souza
-  Date: January 16, 2025
+  Date: January 17, 2025
  */
 
 import com.souza.charles.model.dao.OrderDAO;
@@ -15,7 +15,9 @@ import com.souza.charles.model.entities.enums.OrderStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDAOJDBC implements OrderDAO {
 
@@ -107,7 +109,6 @@ public class OrderDAOJDBC implements OrderDAO {
         }
     }
 
-
     @Override
     public Order findById(Integer id) {
         PreparedStatement preparedStatement = null;
@@ -159,42 +160,86 @@ public class OrderDAOJDBC implements OrderDAO {
         }
     }
 
-    public void insertOrderProductRelation(Long orderId, Long productId) {
+    @Override
+    public void insertOrderProductRelation (Long orderId, Long productId){
+            PreparedStatement preparedStatement = null;
+            try {
+                preparedStatement = connection.prepareStatement(
+                        "INSERT INTO tb_order_product (order_id, product_id) "
+                                + "VALUES (?, ?)");
+                preparedStatement.setLong(1, orderId);
+                preparedStatement.setLong(2, productId);
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new DbException("Unexpected error! No rows affected!");
+                }
+            } catch (SQLException e) {
+                throw new DbException(e.getMessage());
+            } finally {
+                DB.closePreparedStatement(preparedStatement);
+            }
+        }
+
+    public List<Order> findOrdersAssociatedProducts() {
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement(
-                    "INSERT INTO tb_order_product (order_id, product_id) "
-                            + "VALUES (?, ?)");
-            preparedStatement.setLong(1, orderId);
-            preparedStatement.setLong(2, productId);
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new DbException("Unexpected error! No rows affected!");
+                    "SELECT * FROM tb_order "
+                            + "INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id "
+                            + "INNER JOIN tb_product ON tb_product.id = tb_order_product.product_id");
+
+            resultSet = preparedStatement.executeQuery();
+
+            Map<Long, Order> orderMap = new HashMap<>();
+            Map<Long, Product> productMap = new HashMap<>();
+
+            while (resultSet.next()) {
+                Long orderId = resultSet.getLong("id");
+                Order order = orderMap.get(orderId);
+                if (order == null) {
+                    order = instantiateOrder(resultSet);
+                    orderMap.put(orderId, order);
+                }
+
+                Long productId = resultSet.getLong("product_id");
+                Product product = productMap.get(productId);
+                if (product == null) {
+                    product = instantiateProduct(resultSet);
+                    productMap.put(productId, product);
+                }
+
+                order.getProducts().add(product);
             }
+
+            return new ArrayList<>(orderMap.values());
+
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         } finally {
+            DB.closeResultSet(resultSet);
             DB.closePreparedStatement(preparedStatement);
         }
     }
 
-    private Order instantiateOrder(ResultSet resultSet) throws SQLException {
-        Order order = new Order();
-        order.setId(resultSet.getLong("id"));
-        order.setLatitude(resultSet.getDouble("latitude"));
-        order.setLongitude(resultSet.getDouble("longitude"));
-        order.setMoment(resultSet.getTimestamp("moment").toInstant());
-        order.setOrderStatus(OrderStatus.values()[resultSet.getInt("status")]);
-        return order;
-    }
 
-    private Product instantiateProduct(ResultSet resultSet) throws SQLException {
-        Product product = new Product();
-        product.setId(resultSet.getLong("id"));
-        product.setName(resultSet.getString("name"));
-        product.setPrice(resultSet.getDouble("price"));
-        product.setDescription(resultSet.getString("description"));
-        product.setImageUri(resultSet.getString("image_uri"));
-        return product;
+    private Order instantiateOrder (ResultSet resultSet) throws SQLException {
+            Order order = new Order();
+            order.setId(resultSet.getLong("id"));
+            order.setLatitude(resultSet.getDouble("latitude"));
+            order.setLongitude(resultSet.getDouble("longitude"));
+            order.setMoment(resultSet.getTimestamp("moment").toInstant());
+            order.setOrderStatus(OrderStatus.values()[resultSet.getInt("status")]);
+            return order;
+        }
+
+        private Product instantiateProduct (ResultSet resultSet) throws SQLException {
+            Product product = new Product();
+            product.setId(resultSet.getLong("id"));
+            product.setName(resultSet.getString("name"));
+            product.setPrice(resultSet.getDouble("price"));
+            product.setDescription(resultSet.getString("description"));
+            product.setImageUri(resultSet.getString("image_uri"));
+            return product;
+        }
     }
-}

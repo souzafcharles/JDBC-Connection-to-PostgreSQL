@@ -3,9 +3,8 @@ package com.souza.charles.view.application;
   Video Tutorial: Object-oriented and SQL revision using Java and JDBC
   Instructor: Prof. Dr. Nelio Alves - DevSuperior
   Example adapted by: Charles Fernandes de Souza
-  Date: January 16, 2025
+  Date: January 17, 2025
  */
-
 import com.souza.charles.model.dao.DAOFactory;
 import com.souza.charles.model.dao.OrderDAO;
 import com.souza.charles.model.dao.ProductDAO;
@@ -36,14 +35,14 @@ public class App {
         System.out.println(product);
 
         System.out.println("\n********** TEST 02: Order findAll **********");
-        List<Order>listOrder = orderDAO.findAll();
-        for (Order o : listOrder) {
+        List<Order> allOrders = orderDAO.findAll();  // Renomeando para allOrders
+        for (Order o : allOrders) {
             System.out.println(o);
         }
 
         System.out.println("\n********** TEST 02: Product findAll **********");
-        List<Product> listProduct = productDAO.findAll();
-        for (Product p : listProduct) {
+        List<Product> allProducts = productDAO.findAll();  // Renomeando para allProducts
+        for (Product p : allProducts) {
             System.out.println(p);
         }
 
@@ -85,5 +84,15 @@ public class App {
         productDAO.deleteById(id);
         System.out.println("Delete completed!");
         scanner.close();
+
+        System.out.println("\n********** TEST 07: find Orders and their Associated Products**********");
+        List<Order> ordersWithProducts = orderDAO.findOrdersAssociatedProducts();
+        for (Order ord : ordersWithProducts) {
+            System.out.println(ord);
+            for (Product prod : ord.getProducts()) {
+                System.out.println(prod);
+            }
+            System.out.println("******");
+        }
     }
 }

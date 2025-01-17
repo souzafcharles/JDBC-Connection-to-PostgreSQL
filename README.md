@@ -100,6 +100,9 @@ INSERT INTO tb_order_product (order_id, product_id) VALUES
 (2, 2),
 (2, 3);
 ```
+#### Tables:
+![Tables](https://github.com/souzafcharles/JDBC-Connection-to-PostgreSQL/blob/main/img/tables.png)
+
 ***
 ### 3. Entities Classes:
 - Create the `Order` and `Product` classes;
@@ -235,7 +238,8 @@ VALUES (?, ?, ?, ?)
 ```SQL
 INSERT INTO tb_product (name, price, image_uri, description)
 VALUES (?,?,?,?)
-```  
+``` 
+***
 ### 6.4 `relation insert` - Implement the `Order-Product relation insert` of new records:
 
 Add the method signature `insertOrderProductRelation` to the `OrderDAO` interface.
@@ -246,14 +250,21 @@ public interface OrderDAO extends DAO<Order> {
     void insertOrderProductRelation(Long orderId, Long productId);
 }
 ```
+#### App Class:
+```java
+System.out.println("\n********** TEST 04: Order-Product relation insert **********");
+orderDAO.insertOrderProductRelation(newOrder.getId(), newProduct.getId());
+System.out.println("Inserted! New relation between Order id = " + newOrder.getId() + " and Product id = " + newProduct.getId());
+```
 #### Order SQL Query:
 ```SQL
 INSERT INTO tb_order_product (order_id, product_id)
  VALUES (?, ?)
+***
 ```
 ***
 ### 6.5 `update` - Implement the `update` of existing records:
-### App Class:
+#### App Class:
 ```java
 System.out.println("\n********** TEST 05: Order update **********");
 order = orderDAO.findById(5);
@@ -283,25 +294,25 @@ WHERE id = ?
 ### 6.6 `delete` - Implement the `deletion` of records:
 #### App Class:
 ```java
-System.out.println("\n********** TEST 05: Order delete **********");
+System.out.println("\n********** TEST 06: Order delete **********");
 System.out.print("Enter the Order Id for deleteById test: ");
 int id = scanner.nextInt();
 orderDAO.deleteById(id);
 System.out.println("Delete completed!");
 
-System.out.println("\n********** TEST 05: Product delete **********");
+System.out.println("\n********** TEST 06: Product delete **********");
 System.out.print("Enter the Product Id for deleteById test: ");
 id = scanner.nextInt();
 productDAO.deleteById(id);
 System.out.println("Delete completed!");
 ``` 
-#### Order SQL Query (tb_order_product):
+#### Order SQL Query (`tb_order_product`):
 Delete references in the relationship table.
 ```SQL
 DELETE FROM tb_order_product 
 WHERE id = ?;
 ```
-#### Product SQL Query:
+#### Product SQL Query (`tb_order_product`)::
 Delete references in the relationship table.
 ```SQL
 DELETE FROM tb_order_product
@@ -318,4 +329,38 @@ Delete the Product.
 ```SQL
 DELETE FROM tb_product 
 WHERE id = ?;
+```
+
+***
+### 6.7 `find Orders Associated Products` - Implement the find `Orders` and their associated `Products`:
+
+Add the method signature `findOrdersAssociatedProducts` to the `OrderDAO` interface.
+
+OrderDAO Interface Class:
+```java
+public interface OrderDAO extends DAO<Order> {
+  List<Order> findOrdersAssociatedProducts();
+}
+```
+#### Associated Objects:
+![Associated Objects](https://github.com/souzafcharles/JDBC-Connection-to-PostgreSQL/blob/main/img/associated-objects.png)
+
+#### App Class:
+```java
+
+System.out.println("\n********** TEST 07: find Orders and their Associated Products**********");
+List<Order> ordersWithProducts = orderDAO.findOrdersAssociatedProducts();
+for (Order ord : ordersWithProducts) {
+    System.out.println(ord);
+    for (Product prod : ord.getProducts()) {
+        System.out.println(prod);
+    }
+    System.out.println("******");
+}
+```
+#### Order SQL Query:
+```SQL
+SELECT * FROM tb_order 
+INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id
+INNER JOIN tb_product ON tb_product.id = tb_order_product.product_id
 ```
