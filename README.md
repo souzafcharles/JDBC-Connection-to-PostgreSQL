@@ -17,6 +17,7 @@ password=******
 dburl=jdbc:postgresql://localhost:5432/chdeliver
 useSSL=false
 ```
+***
 ### 2. Database Table Creation:
 - Create an SQL script to store data in the `chdeliver` database.
 #### database.sql Script:
@@ -84,6 +85,7 @@ INSERT INTO tb_order_product (order_id, product_id) VALUES
 (2, 2),
 (2, 3);
 ```
+***
 ### 3. Entities Classes:
 - Create the `Order` and `Product` classes;
 
@@ -96,7 +98,7 @@ INSERT INTO tb_order_product (order_id, product_id) VALUES
 - hashCode and equals;
 - toString;
 - Implements Serializable.
-
+***
 ### 4. Tutorial Video Tests Checklist:
 - Primary key and Foreign key;
 - DDL (create table, alter table);
@@ -116,10 +118,10 @@ SELECT * FROM tb_order
 INNER JOIN tb_order_product ON tb_order.id = tb_order_product.order_id
 INNER JOIN tb_product ON tb_product.id = tb_order_product.product_id
 ```
-
+***
 ▶️ [Tutorial Video DevSuperior](https://www.youtube.com/watch?v=xC_yKw3MYX4&ab_channel=DevSuperior)
-
-### 4. DAO Pattern (Data Access Object):
+***
+### 5. DAO Pattern (Data Access Object):
 - Create the `ProductDAO` and `OrderDAO` interfaces following the `DAO Pattern`.
 #### Generic DAO Class:
 ```java
@@ -135,15 +137,18 @@ public interface DAO<T> {
 - Create the `DAOFactory` to instantiate DAO objects.
 
 ![DaoFactory](https://github.com/souzafcharles/JDBC-Connection-to-PostgreSQL/blob/main/img/daoFactory.png)
-
-### 5. CRUD Operations Implementation:
-#### 5.1 `findById` - Implement the search by `ID`:
+***
+### 6. CRUD Operations Implementation:
+***
+#### 6.1 `findById` - Implement the search by `ID`:
 #### App Class:
 ```java
+System.out.println("\n********** TEST 01: Order findById **********");
 OrderDAO orderDAO = DAOFactory.createOrderDAO();
 Order order = orderDAO.findById(1);
 System.out.println(order);
 
+System.out.println("\n********** TEST 01: Product findById **********");
 ProductDAO productDAO = DAOFactory.createProductDAO();     
 Product product = productDAO.findById(2);
 System.out.println(product);
@@ -166,15 +171,17 @@ WHERE tb_order.id = 1;
 SELECT * FROM tb_product 
 WHERE id = 2;
 ```
-
-#### 5.2 `findAll` - Implement the search for `all` records:
+***
+#### 6.2 `findAll` - Implement the search for `all` records:
 #### App Class:
 ```java
+System.out.println("\n********** TEST 02: Order findAll **********");
 List<Order>listOrder = orderDAO.findAll();
 for (Order o : listOrder) {
     System.out.println(o);
 }
 
+System.out.println("\n********** TEST 02: Product findAll **********");
 List<Product> listProduct = productDAO.findAll();
 for (Product p : listProduct) {
     System.out.println(p);
@@ -190,15 +197,17 @@ ORDER BY id;
 SELECT * FROM tb_product 
 ORDER BY name;
 ```
-
-#### 5.3 `insert` - Implement the `insertion` of new records:
+***
+#### 6.3 `insert` - Implement the `insertion` of new records:
 
 #### App Class:
 ```java
+System.out.println("\n********** TEST 03: Order insert **********");
 Order newOrder = new Order(null, -23.555555, -46.666666, Instant.now(), OrderStatus.PENDING);
 orderDAO.insert(newOrder);
 System.out.println("Inserted! New Order id = " + newOrder.getId());
 
+System.out.println("\n********** TEST 03: Product insert **********");
 Product newProduct = new Product(null, "Pizza Margherita Deluxe", 35.0, "Uma pizza clássica Margherita com tomates frescos, manjericão, muçarela de búfala e um toque de azeite extra virgem.", "https://github.com/souzafcharles/4.png");
 productDAO.insert(newProduct);
 System.out.println("Inserted! New Department Name = " + newProduct.getName());
@@ -212,4 +221,33 @@ VALUES (?, ?, ?, ?)
 ```SQL
 INSERT INTO tb_product (name, price, image_uri, description)
 VALUES (?,?,?,?)
-```    
+```  
+***
+#### 6.4 `update` - Implement the `update` of existing records:
+### App Class:
+```java
+System.out.println("\n********** TEST 04: Order update **********");
+order = orderDAO.findById(5);
+order.setOrderStatus(OrderStatus.DELIVERED);
+orderDAO.update(order);
+System.out.println("Update completed!");
+
+System.out.println("\n********** TEST 05: Product update **********");
+product = productDAO.findById(4);
+product.setPrice(45.0);
+productDAO.update(product);
+System.out.println("Update completed!");
+```
+
+#### Order SQL Query:
+```SQL
+UPDATE tb_order 
+SET latitude = ?, longitude = ?, moment = ?, status = ? 
+WHERE id = ?
+```
+#### Product SQL Query:
+```SQL
+UPDATE tb_product "
+SET name = ?, price = ?, image_uri = ?, description = ?
+WHERE id = ?
+```  

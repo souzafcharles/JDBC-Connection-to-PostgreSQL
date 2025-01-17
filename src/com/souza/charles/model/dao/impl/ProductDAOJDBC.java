@@ -58,7 +58,26 @@ public class ProductDAOJDBC implements ProductDAO {
 
     @Override
     public void update(Product product) {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "UPDATE tb_product " +
+                            "SET name = ?, price = ?, image_uri = ?, description = ? " +
+                            "WHERE id = ?");
 
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setDouble(2, product.getPrice());
+            preparedStatement.setString(3, product.getImageUri());
+            preparedStatement.setString(4, product.getDescription());
+            preparedStatement.setLong(5, product.getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+        }
     }
 
     @Override

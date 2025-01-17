@@ -61,7 +61,27 @@ public class OrderDAOJDBC implements OrderDAO {
 
     @Override
     public void update(Order order) {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "UPDATE tb_order "
+                            + "SET latitude = ?, longitude = ?, moment = ?, status = ? "
+                            + "WHERE id = ?");
 
+            preparedStatement.setDouble(1, order.getLatitude());
+            preparedStatement.setDouble(2, order.getLongitude());
+            preparedStatement.setTimestamp(3, Timestamp.from(order.getMoment()));
+            preparedStatement.setInt(4, order.getOrderStatus().ordinal());
+            preparedStatement.setLong(5, order.getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+            DB.closeStatement(preparedStatement);
+        }
     }
 
     @Override
