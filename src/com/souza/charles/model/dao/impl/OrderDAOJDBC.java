@@ -159,6 +159,25 @@ public class OrderDAOJDBC implements OrderDAO {
         }
     }
 
+    public void insertOrderProductRelation(Long orderId, Long productId) {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO tb_order_product (order_id, product_id) "
+                            + "VALUES (?, ?)");
+            preparedStatement.setLong(1, orderId);
+            preparedStatement.setLong(2, productId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new DbException("Unexpected error! No rows affected!");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closePreparedStatement(preparedStatement);
+        }
+    }
+
     private Order instantiateOrder(ResultSet resultSet) throws SQLException {
         Order order = new Order();
         order.setId(resultSet.getLong("id"));

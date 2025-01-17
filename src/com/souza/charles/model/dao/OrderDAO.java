@@ -9,4 +9,5 @@ package com.souza.charles.model.dao;
 import com.souza.charles.model.entities.Order;
 
 public interface OrderDAO extends DAO<Order> {
+    void insertOrderProductRelation(Long orderId, Long productId);
 }

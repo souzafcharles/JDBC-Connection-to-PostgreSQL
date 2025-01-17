@@ -236,11 +236,26 @@ VALUES (?, ?, ?, ?)
 INSERT INTO tb_product (name, price, image_uri, description)
 VALUES (?,?,?,?)
 ```  
+### 6.4 `relation insert` - Implement the `Order-Product relation insert` of new records:
+
+Add the method signature `insertOrderProductRelation` to the `OrderDAO` interface.
+
+OrderDAO Interface Class:
+```java
+public interface OrderDAO extends DAO<Order> {
+    void insertOrderProductRelation(Long orderId, Long productId);
+}
+```
+#### Order SQL Query:
+```SQL
+INSERT INTO tb_order_product (order_id, product_id)
+ VALUES (?, ?)
+```
 ***
-### 6.4 `update` - Implement the `update` of existing records:
+### 6.5 `update` - Implement the `update` of existing records:
 ### App Class:
 ```java
-System.out.println("\n********** TEST 04: Order update **********");
+System.out.println("\n********** TEST 05: Order update **********");
 order = orderDAO.findById(5);
 order.setOrderStatus(OrderStatus.DELIVERED);
 orderDAO.update(order);
@@ -265,7 +280,7 @@ SET name = ?, price = ?, image_uri = ?, description = ?
 WHERE id = ?
 ``` 
 ***
-### 6.5 `delete` - Implement the `deletion` of records:
+### 6.6 `delete` - Implement the `deletion` of records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 05: Order delete **********");

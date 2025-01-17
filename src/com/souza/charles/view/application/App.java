@@ -57,25 +57,29 @@ public class App {
         productDAO.insert(newProduct);
         System.out.println("Inserted! New Product Name = " + newProduct.getName());
 
-        System.out.println("\n********** TEST 04: Order update **********");
+        System.out.println("\n********** TEST 04: Order-Product relation insert **********");
+        orderDAO.insertOrderProductRelation(newOrder.getId(), newProduct.getId());
+        System.out.println("Inserted! New relation between Order id = " + newOrder.getId() + " and Product id = " + newProduct.getId());
+
+        System.out.println("\n********** TEST 05: Order update **********");
         order = orderDAO.findById(2);
         order.setOrderStatus(OrderStatus.DELIVERED);
         orderDAO.update(order);
         System.out.println("Update completed!");
 
-        System.out.println("\n********** TEST 04: Product update **********");
+        System.out.println("\n********** TEST 05: Product update **********");
         product = productDAO.findById(2);
         product.setPrice(45.0);
         productDAO.update(product);
         System.out.println("Update completed!");
 
-        System.out.println("\n********** TEST 05: Order delete **********");
+        System.out.println("\n********** TEST 06: Order delete **********");
         System.out.print("Enter the Order Id for deleteById test: ");
         int id = scanner.nextInt();
         orderDAO.deleteById(id);
         System.out.println("Delete completed!");
 
-        System.out.println("\n********** TEST 05: Product delete **********");
+        System.out.println("\n********** TEST 06: Product delete **********");
         System.out.print("Enter the Product Id for deleteById test: ");
         id = scanner.nextInt();
         productDAO.deleteById(id);
