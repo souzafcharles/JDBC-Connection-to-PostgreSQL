@@ -16,7 +16,7 @@
 ***
 ## Instructions:
 <p align="justify">
-Develop a Java application that connects to a database using `JDBC` and interfaces following the `DAO pattern`, featuring entity classes for `Order` and `Product`. The target `PostgresSQL` database is `chdeliver`.
+Develop a Java application that connects to a database using <code>JDBC</code> and interfaces following the <code>DAO pattern</code>, featuring entity classes for <code>Order</code> and <code>Product</code>. The target <code>PostgresSQL</code> database is <code>chdeliver</code>.
 </p>
 ## Steps to Follow:
 
