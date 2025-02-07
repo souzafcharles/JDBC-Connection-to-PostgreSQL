@@ -159,7 +159,7 @@ public interface DAO<T> {
 ***
 ### 6. CRUD Operations Implementation:
 ***
-### 6.1 `findById` - Implement the search by `ID`:
+### 6.1. `findById` - Implement the search by `ID`:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 01: Order findById **********");
@@ -191,7 +191,7 @@ SELECT * FROM tb_product
 WHERE id = 2;
 ```
 ***
-### 6.2 `findAll` - Implement the search for `all` records:
+### 6.2. `findAll` - Implement the search for `all` records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 02: Order findAll **********");
@@ -217,7 +217,7 @@ SELECT * FROM tb_product
 ORDER BY name;
 ```
 ***
-### 6.3 `insert` - Implement the `insertion` of new records:
+### 6.3. `insert` - Implement the `insertion` of new records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 03: Order insert **********");
@@ -241,7 +241,7 @@ INSERT INTO tb_product (name, price, image_uri, description)
 VALUES (?,?,?,?)
 ``` 
 ***
-### 6.4 `relation insert` - Implement the `Order-Product relation insert` of new records:
+### 6.4. `relation insert` - Implement the `Order-Product relation insert` of new records:
 
 Add the method signature `insertOrderProductRelation` to the `OrderDAO` interface.
 
@@ -264,7 +264,7 @@ INSERT INTO tb_order_product (order_id, product_id)
 ***
 ```
 ***
-### 6.5 `update` - Implement the `update` of existing records:
+### 6.5. `update` - Implement the `update` of existing records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 05: Order update **********");
@@ -292,7 +292,7 @@ SET name = ?, price = ?, image_uri = ?, description = ?
 WHERE id = ?
 ``` 
 ***
-### 6.6 `delete` - Implement the `deletion` of records:
+### 6.6. `delete` - Implement the `deletion` of records:
 #### App Class:
 ```java
 System.out.println("\n********** TEST 06: Order delete **********");
@@ -333,7 +333,7 @@ WHERE id = ?;
 ```
 
 ***
-### 6.7 `find Orders Associated Products` - Implement the find `Orders` and their associated `Products`:
+### 6.7. `find Orders Associated Products` - Implement the find `Orders` and their associated `Products`:
 
 Add the method signature `findOrdersAssociatedProducts` to the `OrderDAO` interface.
 
